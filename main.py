@@ -6,7 +6,7 @@ from kernels import gaussian, boxcar, constant, epanechikov
 def f(x):
     return 2 * torch.sin(x) + x**0.8
 
-def nadaraya_watson_regression(x_train, y_train, x_val, kernel=gaussian):
+def nadaraya_watson_regression(x_train, y_train, x_val, kernel):
     diff = x_val.view(-1,1) - x_train.view(1,-1)
     weights = kernel(diff).type(torch.float32)
     weights /= torch.sum(weights, dim=1, keepdim=True) # normalize weights
@@ -48,12 +48,6 @@ def test_different_kernels():
     plt.savefig('results/regression_kernels.pdf')
     plt.close(fig) # Close the figure to free memory
 
-def adaptive_gaussian_regression(x_train:torch.Tensor, y_train:torch.Tensor, x_val:torch.Tensor, sigma:float=1.0):
-    diff = x_val.view(-1,1) - x_train.view(1,-1)
-    weights = ( - diff**2 / (2*sigma**2)).softmax(dim=-1)
-    y_pred = (weights @ y_train.view(-1,1)).squeeze(1)
-    return y_pred
-
 def test_adaptive_gaussian_regression():
     Path('results').mkdir(parents=True, exist_ok=True)
     torch.manual_seed(1337)
@@ -69,12 +63,12 @@ def test_adaptive_gaussian_regression():
     fig, axes = plt.subplots(1, len(sigmas), figsize=(16, 5), sharey=True)
     axes = axes.flatten()
     for i, sigma in enumerate(sigmas):
-        y_pred = adaptive_gaussian_regression(x_train, y_train, x_val, sigma=sigma)
+        y_pred = nadaraya_watson_regression(x_train, y_train, x_val, kernel = lambda x: gaussian(x, sigma))
         ax:plt.Axes = axes[i]
         ax.scatter(x_train, y_train, label='train data', s=20)
         ax.plot(x_val, y_val, label='true function', color='red')
         ax.plot(x_val, y_pred, label='prediction', color='green', linestyle='--')
-        ax.set_title(f'Gaussian ($\sigma={sigma}$)')
+        ax.set_title(f'Gaussian ($\sigma={sigmas[i]}$)')
         ax.set_xlabel('x')
         if i == 0:
             ax.set_ylabel('y')
