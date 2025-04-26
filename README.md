@@ -10,6 +10,12 @@ This is a simple implementation of the [Nadaraya-Watson](https://en.wikipedia.or
 
 ![Estimated regression function using different bandwidths for the Gaussian kernel](./results/adaptive_gaussian_regression.png)
 
+![Attention pooling](./results/attention_heatmap.png)
+
+## TODO
+
+- [ ] Test different attention pooling methods
+
 ## References
 
 - [Attention Pooling: Nadaraya-Watson Kernel Regression](https://d2l.ai/chapter_attention-mechanisms-and-transformers/attention-pooling.html)

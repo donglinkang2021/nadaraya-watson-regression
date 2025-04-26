@@ -34,7 +34,7 @@
 
 \section{Introduction}
 
-This is a simple implementation of the Nadaraya-Watson regression \cite{d2l:attention_pooling,wikipedia:kernel_regression} algorithm in Python.
+This is a simple implementation of the Nadaraya-Watson regression \cite{attention_pooling, kernel_regression} algorithm in Python.
 
 \section{Data Generation}
 
@@ -117,6 +117,15 @@ We can also perform regression using different bandwidths. Using the Gaussian ke
     \includegraphics[width=\textwidth]{results/adaptive_gaussian_regression.pdf}
     \caption{Estimated regression function using different bandwidths for the Gaussian kernel.}
     \label{fig:adaptive_gaussian}
+\end{figure}
+
+Additionally, we visualize the data for all \texttt{x\_val} and \texttt{x\_train}. The weight matrix, representing the attention weights between pairs of samples after processing by the kernel function, is plotted as a heatmap, as shown in Figure \ref{fig:attention_heatmap}. From this figure, the effect of the bandwidth is clearly visible, indicating how many surrounding \texttt{x\_train} points are considered by each \texttt{x\_val}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{results/attention_heatmap.pdf}
+    \caption{Heatmap of the weight matrix.}
+    \label{fig:attention_heatmap}
 \end{figure}
 
 \bibliographystyle{unsrt}
